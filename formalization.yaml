@@ -1,0 +1,137 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Classical bounds for graph Ramsey numbers"
+  description: >-
+    A Lean 4 / Mathlib formalization of the classical bounds for graph Ramsey numbers:
+    R(3, 3) = 6 (every graph on six vertices has a triangle or three independent vertices, and the
+    pentagon has neither), the Erdős–Szekeres upper bound R(s, t) ≤ C(s + t − 2, s − 1), and
+    Erdős's lower bound R(k, k) > 2^(k/2) for k ≥ 3, proved by a union bound over the edge sets of
+    graphs on n vertices.
+  authors:
+    - "Juan Pablo Traverso Gianini"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Juan Pablo Traverso Gianini"
+
+classification:
+  arxiv: ["math.CO"]
+  msc2020: ["05C55", "05D10"]
+
+sources:
+  - title: "A combinatorial problem in geometry"
+    authors:
+      - "Paul Erdős"
+      - "George Szekeres"
+    id: "http://www.numdam.org/item/CM_1935__2__463_0/"
+    type: "paper"
+    location: "Compositio Mathematica 2 (1935), 463–470"
+    relationship: "formalizes"
+    note: "The binomial upper bound for Ramsey numbers, R(s, t) ≤ C(s + t − 2, s − 1), via the neighbourhood recursion."
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Some remarks on the theory of graphs"
+    authors:
+      - "Paul Erdős"
+    id: "doi:10.1090/S0002-9904-1947-08785-1"
+    type: "paper"
+    location: "Bulletin of the American Mathematical Society 53 (1947), 292–294"
+    relationship: "formalizes"
+    note: "The lower bound R(k, k) > 2^(k/2) for k ≥ 3, by counting graphs (union bound)."
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Combinatorial relations and chromatic graphs"
+    authors:
+      - "R. E. Greenwood"
+      - "A. M. Gleason"
+    id: "doi:10.4153/CJM-1955-001-4"
+    type: "paper"
+    location: "Canadian Journal of Mathematics 7 (1955), 1–7"
+    relationship: "formalizes"
+    note: "R(3, 3) = 6 (among other small Ramsey numbers); here the upper bound is derived from the Erdős–Szekeres recursion and the lower bound from the pentagon."
+    license: "unknown"
+    author_endorsement: "n/a"
+
+status:
+  scope: >-
+    Proved for finite simple graphs: R(3, 3) = 6 as two statements on Fin 6 and Fin 5, the
+    Erdős–Szekeres bound for any finite vertex type and all s, t ≥ 1, and Erdős's lower bound for
+    all k ≥ 3 and all n ≤ 2^(k/2) (real power).
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "autonomous"
+      models: ["Aristotle (Harmonic)"]
+      framework: "Aristotle CLI"
+      tool_setup: >-
+        Produced all proofs in one run from the formal statements and proof plans; the return was
+        audited (statements and headers unchanged, no added axioms) and rebuilt locally.
+      cost:
+        wall_time: "under one hour"
+        spend_usd: "not tracked"
+        hardware: "API-only"
+      prompting_notes: "Formal statements and proof plans supplied."
+    - method: "agent"
+      models: ["Claude Opus 5.5"]
+      framework: "Claude Code (Anthropic)"
+      tool_setup: >-
+        Statement design, proof plans, integration and review of the Aristotle return, and the
+        Palomar packaging, checked with `lake build` and `#print axioms` (Lean v4.35.0-rc3,
+        Mathlib c55e6e786f49471c72fbddbec5415808896aec1e).
+      cost:
+        wall_time: "about two hours"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: "Natural-language instructions in Spanish, directed by the author."
+  spend_usd: "subscription-based"
+  notes: >-
+    The results were chosen by the human author; the Lean proofs are AI-generated and
+    mechanically verified (no `sorry`, axioms limited to propext, Classical.choice and
+    Quot.sound, identical elaborated types for the Challenge/Solution pair).
+
+fidelity:
+  divergences: >-
+    Ramsey numbers are not defined as a minimum; the statements give the defining properties
+    directly. "G contains K_s" is `¬ G.CliqueFree s`, and "G has an independent set of size t" is
+    `¬ Gᶜ.CliqueFree t`. Erdős's bound is stated for every n ≤ 2^(k/2) (real power), i.e. there
+    is a graph on n vertices with neither a k-clique nor an independent k-set.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "Claude Opus 5.5 (AI agent in Claude Code, acting for the author)"
+  notes: >-
+    Agent review by Claude Opus 5.5, distinct from the mechanical verification: the agent
+    compared the statements with the classical results, checked that the Aristotle return left
+    every statement and header unchanged, and confirmed by `lake build`, `#print axioms` and a
+    comparison of the fully elaborated Challenge and Solution types that the proofs use no
+    `sorry` and only propext, Classical.choice and Quot.sound. The author directed the work and
+    approved the statements. No independent human mathematical review has been performed. The
+    results are classical; no mathematical novelty is claimed.
+
+alignment:
+  namespace: "RamseyGraphs"
+  statements:
+    - source: "Greenwood–Gleason (1955): R(3, 3) ≤ 6"
+      lean: "RamseyGraphs.ramsey_three_three_upper"
+      module: "Challenge"
+      status: "proved"
+    - source: "Greenwood–Gleason (1955): R(3, 3) > 5"
+      lean: "RamseyGraphs.ramsey_three_three_lower"
+      module: "Challenge"
+      status: "proved"
+    - source: "Erdős–Szekeres (1935): R(s, t) ≤ C(s + t − 2, s − 1)"
+      lean: "RamseyGraphs.erdos_szekeres"
+      module: "Challenge"
+      status: "proved"
+    - source: "Erdős (1947): R(k, k) > 2^(k/2) for k ≥ 3"
+      lean: "RamseyGraphs.erdos_lower_bound"
+      module: "Challenge"
+      status: "proved"
+
+acknowledgements: >-
+  Mathlib and the Lean community; Harmonic's Aristotle.

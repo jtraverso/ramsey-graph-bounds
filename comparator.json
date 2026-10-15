@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "RamseyGraphs.ramsey_three_three_upper",
+    "RamseyGraphs.ramsey_three_three_lower",
+    "RamseyGraphs.erdos_szekeres",
+    "RamseyGraphs.erdos_lower_bound"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
